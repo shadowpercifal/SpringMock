@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StopWatch;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -14,6 +15,7 @@ import ru.mailprotector.springmock.Model.Currencies.BaseCurrency;
 import ru.mailprotector.springmock.Model.RequestDTO;
 import ru.mailprotector.springmock.Model.ResponseDTO;
 
+import java.time.Clock;
 import java.util.HashMap;
 
 @RestController
@@ -34,8 +36,9 @@ public class MainController {
     )
     public ResponseEntity<?> postBalances(@RequestBody RequestDTO request){
         try{
+            long start = System.nanoTime();
             logger.info("Processing request");
-            logger.debug("********** Request Info **********\n" + mapper.writerWithDefaultPrettyPrinter().writeValueAsString(request));
+//            logger.debug("********** Request Info **********\n" + mapper.writerWithDefaultPrettyPrinter().writeValueAsString(request));
             if (request.getClientId().length() == 0){
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ClientId is empty!");
             }
@@ -48,8 +51,8 @@ public class MainController {
                     currency.name,
                     String.valueOf(Math.floor(Math.random() * currency.maxLimit)),
                     currency.maxLimit.toString());
-            logger.info("Request passed");
-            logger.debug("========== Response ==========\n" + mapper.writerWithDefaultPrettyPrinter().writeValueAsString(response));
+            logger.info("Request passed and took " + String.valueOf(System.nanoTime() - start) + "nanosec");
+//            logger.debug("========== Response ==========\n" + mapper.writerWithDefaultPrettyPrinter().writeValueAsString(response));
             return ResponseEntity.ok(response);
         }
         catch (Exception ex){
