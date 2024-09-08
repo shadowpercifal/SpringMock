@@ -52,6 +52,7 @@ public class MainController {
                     String.valueOf(Math.floor(Math.random() * currency.maxLimit)),
                     currency.maxLimit.toString());
             logger.info("Request passed and took " + String.valueOf(System.nanoTime() - start) + "nanosec");
+            Thread.sleep(1000);
 //            logger.debug("========== Response ==========\n" + mapper.writerWithDefaultPrettyPrinter().writeValueAsString(response));
             return ResponseEntity.ok(response);
         }
